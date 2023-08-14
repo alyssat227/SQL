@@ -1,0 +1,32 @@
+CREATE TABLE merchandise (id INTEGER PRIMARY KEY, name TEXT, aisle INTEGER, price INTEGER, popularity INTEGER);
+
+INSERT INTO merchandise VALUES (1, "cellular phone", 6, 649.99, 96);
+INSERT INTO merchandise VALUES (2, "wireless headphones", 9, 199.99, 76);
+INSERT INTO merchandise VALUES (3, "gaming console", 4, 399.99, 89);
+INSERT INTO merchandise VALUES (4, "laptop", 7, 774.99, 82);
+INSERT INTO merchandise VALUES (5, "cellphone case", 8, 35.99, 68);
+INSERT INTO merchandise VALUES (6, "PC tower", 7, 532.99, 91);
+INSERT INTO merchandise VALUES (7, "PC monitor", 10, 79.99, 74);
+INSERT INTO merchandise VALUES (8, "cellphone charger", 8, 29.99, 93);
+INSERT INTO merchandise VALUES (9, "gaming controller", 4, 55.99, 85);
+INSERT INTO merchandise VALUES (10, "computer processing unit", 10, 289.99, 98);
+INSERT INTO merchandise VALUES (11, "graphics card", 10, 364.99, 99);
+INSERT INTO merchandise VALUES (12, "wireless charging pad", 8, 59.99, 69);
+INSERT INTO merchandise VALUES (13, "wireless mouse", 10, 24.99, 86);
+INSERT INTO merchandise VALUES (14, "bluetooth speaker", 1, 54.99, 72);
+INSERT INTO merchandise VALUES (15, "keyboard", 10, 124.99, 83);
+
+--display the database ordered by price. 
+SELECT * FROM store
+ORDER BY price desc; 
+
+--what is the avg price of items in the bulk section? 
+SELECT AVG(price) "avg bulk item price"
+FROM store
+where section='bulk'; 
+
+--what are the most 5 popular items? 
+SELECT item, price, popularity
+FROM store
+order by popularity desc
+limit 5; 
