@@ -1,3 +1,5 @@
+#This project pulls information from the Superstore database created below
+
 CREATE TABLE superstore (
     item_id INTEGER PRIMARY KEY,
     item_name TEXT,
