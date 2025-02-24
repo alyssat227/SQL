@@ -1,0 +1,62 @@
+-- This project queries a database with multiple tables to ascertain customer and order information.
+
+
+-- How many many unique orders were placed in January? In other words, how many distinct order ids do we have?
+
+SELECT COUNT(distinct orderID)
+FROM JanSales
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID';
+
+
+-- How many of those orders were for an iPhone?
+
+SELECT COUNT(distinct orderID)
+FROM JanSales
+WHERE Product = 'iPhone'
+AND length(orderID) = 6
+AND orderID <> 'Order ID';
+
+
+-- Select the customer account numbers for all the orders that were placed in February.
+
+SELECT distinct acctnum
+FROM customers
+INNER JOIN FebSales
+ON customers.order_id = FebSales.orderID
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID';
+
+
+-- Which was the cheapest product that was sold in January, and what was the price?
+
+SELECT Product, price
+FROM JanSales
+ORDER BY price asc
+LIMIT 1;
+
+
+-- What is the total revenue for each product sold in January?
+
+SELECT SUM(Quantity) * price AS revenue, Product
+FROM JanSales
+GROUP BY Product;
+
+
+-- Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+
+SELECT Product, SUM(Quantity), SUM(Quantity) * price AS total_revenue
+FROM FebSales
+WHERE location = '548 Lincoln St, Seattle, WA 98101'
+GROUP BY Product;
+
+
+-- How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?
+
+SELECT COUNT(distinct customers.acctnum), AVG(Quantity * price)
+FROM FebSales
+LEFT JOIN customers
+ON FebSales.orderID = customers.order_ID
+WHERE FebSales.Quantity > 2
+AND length(orderID) = 6
+AND orderID <> 'Order ID';
