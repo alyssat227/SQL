@@ -1,0 +1,96 @@
+-- For this project, I downloaded Spotify data from Kaggle and created a table to insert the data into.
+
+-- Creating the table: 
+
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness text NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL 
+)
+
+-- Then I inserted the Spotify Data .csv into the table.
+
+-- Next, I explored the data using the following SQL. 
+
+
+-- List the songs in alphabetical order.
+
+SELECT track_name
+FROM Spotifydata
+ORDER BY track_name asc;
+
+
+-- What are the top 10 most popular songs ranked on Spotify and who sang them?
+
+SELECT artist_name, track_name, popularity
+FROM Spotifydata
+GROUP BY track_name
+ORDER BY popularity desc
+LIMIT 10;
+
+
+-- What is the average danceability for those top 10 songs?
+
+SELECT AVG(danceability)
+FROM (SELECT popularity, danceability 
+    FROM Spotifydata 
+    ORDER BY popularity desc LIMIT 10);
+
+
+-- Which artists are featured more than once and what is their average popularity?
+
+SELECT artist_name, COUNT(artist_name), AVG(popularity) AS average_popularity
+FROM Spotifydata
+GROUP BY artist_name
+HAVING COUNT(artist_name) > 1;
+
+
+-- Who released the longest song on Spotify and what was the length in minutes? 
+
+SELECT artist_name, track_name, ROUND(duration_ms)/(60000) AS track_length
+FROM Spotifydata
+GROUP BY artist_name
+ORDER BY track_length desc
+LIMIT 1;
+
+
+-- Rank the songs by volume.
+
+SELECT track_name,
+CASE WHEN loudness < -10 THEN 'Extremely Loud'
+WHEN loudness < -7 THEN 'Loud'
+WHEN loudness < -4 THEN 'Moderate'
+ELSE 'Quiet'
+END AS 'Volume'
+FROM Spotifydata
+GROUP BY loudness;
+
+
+-- Which songs have higher level energies but lower level danceabilities?  What are the levels?
+
+SELECT track_name, energy, danceability
+FROM Spotifydata
+WHERE energy >=0.5
+AND danceability < 0.5;
+
+
+-- What is the average energy of the songs that feature a contributing artist?
+
+SELECT AVG(energy)
+FROM Spotifydata
+WHERE track_name LIKE '%feat%';
